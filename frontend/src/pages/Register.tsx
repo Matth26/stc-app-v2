@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaUser } from 'react-icons/fa';
+
+import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
+import { register, reset } from '../features/auth/authSlice';
 
 interface RegisterForm {
   name: string;
@@ -24,7 +29,23 @@ const Register = () => {
     password2: '',
   });
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { user, isLoading, isSuccess, isError, message } = useAppSelector(
+    (state) => state.auth
+  );
+
   const { name, email, password, password2 } = formData;
+
+  useEffect(() => {
+    if (isError) toast.error(message);
+
+    // Redirect when registered
+    if (isSuccess || user) navigate('/');
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -32,6 +53,21 @@ const Register = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (password !== password2) {
+      toast.error('Passwords do not match');
+    } else {
+      const userData = { name, email, password };
+      dispatch(register(userData));
+    }
+  };
+
+  if (isLoading) {
+    return <div>LOADING...</div>;
+  }
 
   return (
     <div>
@@ -43,7 +79,7 @@ const Register = () => {
         <p className="text-2xl text-slate-700">Please create an Account</p>
       </section>
       <section className="grid place-items-center">
-        <form className="w-96">
+        <form onSubmit={onSubmit} className="w-96">
           <label className="block mb-4">
             <span className="block text-sm font-medium text-slate-700">
               Name
@@ -97,36 +133,36 @@ const Register = () => {
               className={styles.placeholder}
             ></input>
           </label>
-        </form>
-        <div className="text-center w-96">
-          <button
-            id="button"
-            type="submit"
-            className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white font-bold tracking-wider rounded-md p-2 w-full"
-          >
-            <svg
-              className="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+          <label className="text-center w-96">
+            <button
+              id="button"
+              type="submit"
+              className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white font-bold tracking-wider rounded-md p-2 w-full"
             >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Submit
-          </button>
-        </div>
+              <svg
+                className="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Submit
+            </button>
+          </label>
+        </form>
       </section>
     </div>
   );
