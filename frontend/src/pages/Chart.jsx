@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaRegListAlt } from 'react-icons/fa';
+import { NavLink, useParams } from 'react-router-dom';
+import { FaRegListAlt, FaChevronLeft, FaPen } from 'react-icons/fa';
 
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
 import { getChart, reset } from '../features/chart/chartSlice';
@@ -31,10 +31,26 @@ const ChartList = () => {
   return (
     <div>
       <section className="grid place-items-center mb-6">
-        <h1 className="flex text-4xl text-slate-800 font-bold items-center mb-2">
-          <FaRegListAlt className="mx-2" />
-          Chart
-        </h1>
+        <div className="flex items-center justify-between w-full">
+          <NavLink
+            to="/new-chart"
+            className="w-24 flex items-center space-x-2 justify-center bg-slate-600 shadow-xl hover:bg-indigo-500 text-white font-bold tracking-wider rounded-md p-2 "
+          >
+            <FaChevronLeft />
+            <span>Back</span>
+          </NavLink>
+          <h1 className="flex text-4xl text-slate-800 font-bold items-center">
+            <FaRegListAlt className="mx-2" />
+            Chart
+          </h1>
+          <NavLink
+            to="/new-chart"
+            className="w-24 flex items-center space-x-2 justify-center bg-slate-600 shadow-xl hover:bg-indigo-500 text-white font-bold tracking-wider rounded-md p-2 "
+          >
+            <FaPen />
+            <span>Edit</span>
+          </NavLink>
+        </div>
       </section>
       <section className="grid place-items-center w-3/4 mx-auto">
         <div className="flex space-x-4">

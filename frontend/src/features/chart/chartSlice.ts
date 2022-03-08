@@ -131,7 +131,7 @@ export const chartSlice = createSlice({
       })
       .addCase(getUserCharts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        //state.isSuccess = true;
         state.charts = action.payload;
       })
       .addCase(getUserCharts.rejected, (state, action) => {

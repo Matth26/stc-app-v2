@@ -16,13 +16,13 @@ const Header = () => {
 
   return (
     <header className="flex items-center justify-between border-b h-16 mb-4">
-      <NavLink className="mx-2 flex items-center text-slate-800" to="/">
+      <NavLink className="mx-2 flex items-center text-slate-800" to="/charts">
         Structural Tension Chart App
       </NavLink>
 
       {user ? (
         <div className="flex space-x-6 text-slate-700">
-          <div>{user.name}</div>
+          <NavLink to="/charts">{user.name}</NavLink>
           <button
             className="mx-2 flex items-center text-slate-800"
             onClick={onLogout}
