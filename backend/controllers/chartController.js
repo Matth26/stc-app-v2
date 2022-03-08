@@ -51,7 +51,7 @@ const getChart = asyncHandler(async (req, res) => {
 // @route   POST /api/charts
 // @access  Private
 const createChart = asyncHandler(async (req, res) => {
-  const { name, current, goal } = req.body;
+  const { name, current, goal, steps } = req.body;
 
   if (!name) {
     res.status(400);
@@ -66,7 +66,13 @@ const createChart = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 
-  const chart = await Chart.create({ user: req.user.id, name, current, goal });
+  const chart = await Chart.create({
+    user: req.user.id,
+    name,
+    current,
+    goal,
+    steps,
+  });
 
   res.status(201).json(chart);
 });

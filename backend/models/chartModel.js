@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const StepSchema = require('./stepModel');
 
 const chartSchema = mongoose.Schema(
   {
@@ -6,6 +7,7 @@ const chartSchema = mongoose.Schema(
     name: { type: String, required: [true, 'Please add a chart name'] },
     current: { type: String, default: '' },
     goal: { type: String, default: '' },
+    steps: { type: [StepSchema], default: [] },
   },
   { timestamps: true }
 );

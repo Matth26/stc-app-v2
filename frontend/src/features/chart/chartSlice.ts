@@ -3,11 +3,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import chartService from './chartService';
 
+interface Step {
+  date: Date;
+  text: string;
+}
+
 export interface Chart {
   _id: Schema.Types.ObjectId;
   name: string;
   goal: string;
   current: string;
+  steps: Step[];
 }
 
 interface ChartState {
@@ -33,12 +39,14 @@ interface APICreateChartData {
   name: string;
   goal: string;
   current: string;
+  steps: Step[];
 }
 
 export interface CreateChartProps {
   name: string;
   goal: string;
   current: string;
+  steps: Step[];
 }
 
 export const createChart = createAsyncThunk<

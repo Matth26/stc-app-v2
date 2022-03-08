@@ -38,10 +38,13 @@ const ChartList = () => {
         {charts.map((chart) => {
           const link = `/charts/${chart._id.toString()}`;
           return (
-            <div className="flex items-center space-x-4">
+            <div
+              key={chart._id.toString()}
+              className="flex items-center space-x-4"
+            >
               <FaChevronRight className="text-slate-600 w-2" />
               <NavLink className="text-slate-700 text-xl" key={link} to={link}>
-                Test
+                {chart.name}
               </NavLink>
               <NavLink
                 to={link}

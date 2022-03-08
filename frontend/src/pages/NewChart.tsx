@@ -1,14 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FaRegListAlt } from 'react-icons/fa';
+import {
+  FaRegListAlt,
+  FaChevronRight,
+  FaPlusCircle,
+  FaTrash,
+  FaRegTimesCircle,
+} from 'react-icons/fa';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
 import { createChart, reset } from '../features/chart/chartSlice';
 
+interface Step {
+  date: Date;
+  text: string;
+}
 interface ChartForm {
   name: string;
   goal: string;
   current: string;
+  steps: Step[];
 }
 
 const styles = {
@@ -40,18 +53,75 @@ const NewChart = () => {
     dispatch(reset());
   }, [dispatch, isError, isSuccess, navigate, message]);
 
+  // New step
+  const [newStepDate, setNewStepDate] = useState<Date>(new Date());
+  const [newStepText, setNewStepText] = useState<string>('');
+
+  const addStep = (newStep: Step) => {
+    setChartData((prevState) => ({
+      ...prevState,
+      steps: [...prevState.steps, newStep],
+    }));
+  };
+
+  // Already entered steps
+  // Date
+  const updateAlreadyEnteredStepDate = (newDate: Date, index: number) => {
+    setChartData((prevState) => {
+      let newSteps = [...prevState.steps];
+      newSteps[index] = { ...newSteps[index], date: newDate };
+      return {
+        ...prevState,
+        steps: newSteps,
+      };
+    });
+  };
+
+  // Text
+  const updateAlreadyEnteredStepText = (newText: string, index: number) => {
+    setChartData((prevState) => {
+      let newSteps = [...prevState.steps];
+      newSteps[index] = { ...newSteps[index], text: newText };
+      return {
+        ...prevState,
+        steps: newSteps,
+      };
+    });
+  };
+
+  // Delete
+  const deleteAlreadyEnteredStep = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    setChartData((prevState) => ({
+      ...prevState,
+      steps: [...prevState.steps].filter((e, i) => i !== index),
+    }));
+  };
+
+  // Chart Data
   const [chartData, setChartData] = useState<ChartForm>({
     name: '',
     goal: '',
     current: '',
+    steps: [],
   });
 
-  const { name, goal, current } = chartData;
+  const { name, goal, current, steps } = chartData;
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(createChart({ name, goal, current }));
+    dispatch(createChart({ name, goal, current, steps }));
+  };
+
+  const onAddStepClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    addStep({ date: newStepDate, text: newStepText });
+    setNewStepDate(new Date());
+    setNewStepText('');
   };
 
   const onChange = (
@@ -106,6 +176,69 @@ const NewChart = () => {
               className={styles.placeholder}
             ></textarea>
           </label>
+
+          <label className="block mb-6">
+            <span className="block text-sm font-medium text-slate-700">
+              Steps
+            </span>
+            {chartData.steps.map((s, index) => (
+              <div key={index} className="flex space-x-2 items-center mt-2">
+                <FaChevronRight className="text-slate-600" />
+                <div className="border border-slate-300 rounded-md text-sm px-3 py-2 w-48">
+                  <DayPickerInput
+                    value={s.date}
+                    onDayChange={(day) =>
+                      updateAlreadyEnteredStepDate(day, index)
+                    }
+                  />
+                </div>
+                <input
+                  type="text"
+                  id={`step_${index}`}
+                  name={`step_${index}`}
+                  value={s.text}
+                  onChange={(e) =>
+                    updateAlreadyEnteredStepText(e.target.value, index)
+                  }
+                  className={styles.placeholder + ' mt-0'}
+                />
+                <button
+                  id="button"
+                  onClick={(e) => deleteAlreadyEnteredStep(e, index)}
+                  className="flex items-center justify-center bg-slate-500 shadow-xl hover:bg-red-500 text-white space-x-2 tracking-wider rounded-full p-2"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
+            <div className="flex space-x-2 items-center mt-2">
+              <FaChevronRight className="text-slate-600" />
+              <div className="border border-slate-300 rounded-md text-sm px-3 py-2 w-48">
+                <DayPickerInput
+                  value={newStepDate}
+                  onDayChange={(day) => setNewStepDate(day)}
+                />
+              </div>
+              <input
+                type="text"
+                id="step"
+                name="step"
+                value={newStepText}
+                onChange={(e) => setNewStepText(e.target.value)}
+                placeholder="Enter the step text"
+                className={styles.placeholder + ' mt-0'}
+              ></input>
+              <button
+                id="button"
+                onClick={onAddStepClick}
+                className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white space-x-2 tracking-wider rounded-md py-1.5 w-52"
+              >
+                <FaPlusCircle />
+                <span>Add Step</span>
+              </button>
+            </div>
+          </label>
+
           <label className="block mb-6">
             <span className="block text-sm font-medium text-slate-700">
               Current

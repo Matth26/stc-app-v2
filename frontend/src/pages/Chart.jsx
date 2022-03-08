@@ -46,6 +46,21 @@ const ChartList = () => {
         <div className="flex space-x-4">
           <h2>Current</h2> <div>{chart.current}</div>
         </div>
+        <div className="">
+          <h2>Steps</h2>
+          <div>
+            {chart?.steps ? (
+              chart.steps.map((s) => (
+                <div key={s._id} className="flex space-x-4">
+                  <span>{s.text}</span>
+                  <span>{s.date}</span>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
       </section>
     </div>
   );
