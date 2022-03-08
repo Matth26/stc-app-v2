@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { CreateChartProps } from './chartSlice';
+import { ChartForm } from '../../app/types';
 
 const API_URL: string = '/api/charts';
 
-const createChart = async (chartData: CreateChartProps, token: string) => {
+const createChart = async (chartData: ChartForm, token: string) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };

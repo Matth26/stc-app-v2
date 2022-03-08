@@ -11,17 +11,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
 import { createChart, reset } from '../features/chart/chartSlice';
-
-interface Step {
-  date: Date;
-  text: string;
-}
-interface ChartForm {
-  name: string;
-  goal: string;
-  current: string;
-  steps: Step[];
-}
+import { ChartForm, StepForm } from '../app/types';
 
 const styles = {
   placeholder: `mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 
@@ -56,7 +46,7 @@ const NewChart = () => {
   const [newStepDate, setNewStepDate] = useState<Date>(new Date());
   const [newStepText, setNewStepText] = useState<string>('');
 
-  const addStep = (newStep: Step) => {
+  const addStep = (newStep: StepForm) => {
     setChartData((prevState) => ({
       ...prevState,
       steps: [...prevState.steps, newStep],

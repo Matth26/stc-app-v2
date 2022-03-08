@@ -1,24 +1,11 @@
-import { Schema } from 'mongoose';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import chartService from './chartService';
-
-interface Step {
-  date: Date;
-  text: string;
-}
-
-export interface Chart {
-  _id: Schema.Types.ObjectId;
-  name: string;
-  goal: string;
-  current: string;
-  steps: Step[];
-}
+import { ChartForm, Chart } from '../../app/types';
 
 interface ChartState {
   charts: Chart[];
-  chart: Chart | {};
+  chart: Chart | undefined;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -27,31 +14,16 @@ interface ChartState {
 
 const initialState: ChartState = {
   charts: [],
-  chart: {},
+  chart: undefined,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
 };
 
-interface APICreateChartData {
-  //_id: user._id,
-  name: string;
-  goal: string;
-  current: string;
-  steps: Step[];
-}
-
-export interface CreateChartProps {
-  name: string;
-  goal: string;
-  current: string;
-  steps: Step[];
-}
-
 export const createChart = createAsyncThunk<
-  APICreateChartData, // return type of the payload creator
-  CreateChartProps, // first argument to the payload creator
+  ChartForm, // return type of the payload creator
+  ChartForm, // first argument to the payload creator
   { state: RootState; rejectValue: string }
 >('charts/create', async (chartData, thunkAPI) => {
   try {
