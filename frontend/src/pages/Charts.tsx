@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FaRegListAlt, FaChevronRight, FaPlusCircle } from 'react-icons/fa';
 
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
-import { getUserCharts } from '../features/chart/chartSlice';
+import { deleteChart, getUserCharts } from '../features/chart/chartSlice';
 
 const ChartList = () => {
   const { isLoading, charts } = useAppSelector((state) => state.chart);
@@ -39,7 +39,8 @@ const ChartList = () => {
       </section>
       <section className="grid place-items-left w-3/4 mx-auto mb-8">
         {charts.map((chart) => {
-          const link = `/charts/${chart._id.toString()}`;
+          const id = chart._id.toString();
+          const link = `/charts/${id}`;
           return (
             <div
               key={chart._id.toString()}
@@ -70,7 +71,10 @@ const ChartList = () => {
                   Edit
                 </NavLink>
                 <button
-                  onClick={() => console.log(`delete ${chart._id}`)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(deleteChart(id));
+                  }}
                   className="flex items-center justify-center my-1 bg-red-600 shadow-xl hover:bg-red-500 text-white tracking-wider rounded-md p-2"
                 >
                   Delete

@@ -102,8 +102,9 @@ const deleteChart = asyncHandler(async (req, res) => {
   }
 
   await chart.remove();
+  const charts = await Chart.find({ user: req.user.id });
 
-  res.status(200).json({ success: true });
+  res.status(200).json(charts);
 });
 
 // @desc    Update user chart

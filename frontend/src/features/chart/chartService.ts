@@ -30,10 +30,34 @@ const getChart = async (chartId: string, token: string) => {
   return response.data;
 };
 
+const updateChart = async (
+  chartData: ChartForm,
+  chartId: string,
+  token: string
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await axios.put(API_URL + '/' + chartId, chartData, config);
+
+  return response.data;
+};
+
+const deleteChart = async (chartId: string, token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await axios.delete(API_URL + '/' + chartId, config);
+
+  return response.data;
+};
+
 const chartService = {
   createChart,
+  updateChart,
   getCharts,
   getChart,
+  deleteChart,
 };
 
 export default chartService;
