@@ -20,7 +20,6 @@ const styles = {
 };
 
 const NewChart = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const { isLoading, isError, isSuccess, message } = useAppSelector(
     (state) => state.chart
   );

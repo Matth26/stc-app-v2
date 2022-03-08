@@ -39,7 +39,7 @@ const getChart = asyncHandler(async (req, res) => {
     throw new Error('Chart not found');
   }
 
-  if (chart.user.toSting() !== req.user.id) {
+  if (chart.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error('Not authorized');
   }
@@ -90,7 +90,7 @@ const deleteChart = asyncHandler(async (req, res) => {
     throw new Error('Chart not found');
   }
 
-  if (chart.user.toSting() !== req.user.id) {
+  if (chart.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error('Not authorized');
   }
@@ -119,7 +119,7 @@ const updateChart = asyncHandler(async (req, res) => {
     throw new Error('Chart not found');
   }
 
-  if (chart.user.toSting() !== req.user.id) {
+  if (chart.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error('Not authorized');
   }

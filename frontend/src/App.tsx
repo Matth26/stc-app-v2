@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Header from './components/Header';
 import NewChart from './pages/NewChart';
+import ChartList from './pages/Charts';
+import Chart from './pages/Chart';
 import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
@@ -20,6 +22,12 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/new-chart" element={<PrivateRoute />}>
               <Route path="/new-chart" element={<NewChart />} />
+            </Route>
+            <Route path="/charts" element={<PrivateRoute />}>
+              <Route path="/charts" element={<ChartList />} />
+            </Route>
+            <Route path="/charts/:id" element={<PrivateRoute />}>
+              <Route path="/charts/:id" element={<Chart />} />
             </Route>
           </Routes>
         </div>
