@@ -33,7 +33,7 @@ const ChartList = () => {
   else if (isLoading) return <Loader />;
   else
     return (
-      <div>
+      <div className="w-4/5 mx-auto">
         <div className="grid place-items-center mb-6">
           <div className="flex items-center justify-between w-full">
             <NavLink

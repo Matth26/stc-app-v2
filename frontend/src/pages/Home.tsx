@@ -1,34 +1,25 @@
 import { NavLink } from 'react-router-dom';
+import { useAppSelector } from '../hooks/reduxHooks';
 
 const Home = () => {
+  const { user } = useAppSelector((state) => state.auth);
   return (
     <div className="grid place-items-center">
-      <NavLink
-        to="/new-chart"
-        className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white font-bold tracking-wider rounded-md p-2 w-48"
-      >
-        <svg
-          className="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+      <h1 className="text-3xl text-slate-800 font-bold items-center mb-6">
+        Welcome to the Structural Tension Chart App
+      </h1>
+      {!user ? (
+        <h2 className="text-xl text-slate-500 font-bold items-center">
+          Please log in to see your charts
+        </h2>
+      ) : (
+        <NavLink
+          to="/charts"
+          className="flex items-center space-x-2 justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white font-normal tracking-wider rounded-md p-2 w-36"
         >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        Add New Chart
-      </NavLink>
+          See my charts
+        </NavLink>
+      )}
     </div>
   );
 };

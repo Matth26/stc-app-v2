@@ -144,7 +144,7 @@ const NewChart = () => {
   }
 
   return (
-    <div>
+    <div className="w-4/5 mx-auto">
       <section className="grid place-items-center mb-6">
         <div className="flex items-center justify-between w-full">
           <NavLink

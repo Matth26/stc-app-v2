@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
 import { login, reset } from '../features/auth/authSlice';
+import Loader from '../components/Loader';
 
 interface LoginForm {
   email: string;
@@ -58,7 +59,7 @@ const Login = () => {
   };
 
   if (isLoading) {
-    return <div>LOADING...</div>;
+    return <Loader />;
   }
 
   return (

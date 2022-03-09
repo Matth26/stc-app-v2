@@ -38,7 +38,7 @@ const ChartList = () => {
   }
 
   return (
-    <div>
+    <div className="w-4/5 mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div className="w-36"></div>
         <h1 className="flex text-4xl text-slate-800 font-bold items-center">

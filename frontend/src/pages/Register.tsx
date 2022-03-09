@@ -5,6 +5,7 @@ import { FaUser } from 'react-icons/fa';
 
 import { useAppSelector, useAppDispatch } from '../hooks/reduxHooks';
 import { register, reset } from '../features/auth/authSlice';
+import Loader from '../components/Loader';
 
 interface RegisterForm {
   name: string;
@@ -66,7 +67,7 @@ const Register = () => {
   };
 
   if (isLoading) {
-    return <div>LOADING...</div>;
+    return <Loader />;
   }
 
   return (
