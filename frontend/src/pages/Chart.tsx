@@ -29,7 +29,7 @@ const ChartList = () => {
   }, [dispatch, id]);
 
   if (!id) return <div>Error: missing id</div>;
-  else if (!chart) return <div>Chart not found</div>;
+  else if (!chart) return <Loader />;
   else if (isLoading) return <Loader />;
   else
     return (
