@@ -21,7 +21,7 @@ const ReadChart = () => {
           </h1>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-xl font-medium text-slate-700 mb-2">Goal</h2>
           <div className="ml-4 text-slate-600">
             {chart.goal.split('\n').map((p: string, index: number) => (
@@ -34,8 +34,8 @@ const ReadChart = () => {
         <div className="mb-6">
           <h2 className="text-xl font-medium text-slate-700">Steps</h2>
           {chart.steps.map((s, index) => (
-            <div key={index} className="ml-4 flex space-x-4 items-center mt-2">
-              <FaChevronRight className="text-slate-600" />
+            <div key={index} className="ml-8 flex space-x-4 items-center mt-2">
+              <FaChevronRight className="w-2 text-slate-600" />
               <div className="text-sm text-slate-600 px-3 py-2">
                 {s.date.toISOString().slice(0, 10).replaceAll('-', '/')}
               </div>
@@ -43,7 +43,7 @@ const ReadChart = () => {
             </div>
           ))}
         </div>
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-xl font-medium text-slate-700 mb-2">Current</h2>
           <div className="ml-4 text-slate-600">
             {chart.current.split('\n').map((p: string, index: number) => (
