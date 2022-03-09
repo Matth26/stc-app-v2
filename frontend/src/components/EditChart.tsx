@@ -17,6 +17,7 @@ import {
   removeStepToChart,
   updateStepText,
 } from '../features/chart/chartSlice';
+import Loader from '../components/Loader';
 
 function parseDate(str: string, format: any, locale: any) {
   const parsed = dateFnsParse(str, format, new Date(), { locale });
@@ -57,132 +58,136 @@ const EditChart = () => {
   };
 
   if (!chart) {
-    return <div>Chart not found</div>;
-  }
-  return (
-    <div className="grid place-items-center">
-      <form onSubmit={onSubmit} className="w-3/4">
-        <label className="block mb-4">
-          <span className="block text-sm font-medium text-slate-700">Name</span>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={chart.name}
-            onChange={(e) => dispatch(updateChartName(e.target.value))}
-            placeholder="Enter the name of the chart"
-            className={styles.placeholder}
-          ></input>
-        </label>
-        <label className="block mb-6">
-          <span className="block text-sm font-medium text-slate-700">Goal</span>
-          <textarea
-            id="goal"
-            name="goal"
-            value={chart.goal}
-            onChange={(e) => dispatch(updateChartGoal(e.target.value))}
-            placeholder="Enter your goal"
-            className={styles.placeholder}
-          ></textarea>
-        </label>
+    return <Loader />;
+  } else
+    return (
+      <div className="grid place-items-center">
+        <form onSubmit={onSubmit} className="w-3/4">
+          <label className="block mb-4">
+            <span className="block text-sm font-medium text-slate-700">
+              Name
+            </span>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={chart.name}
+              onChange={(e) => dispatch(updateChartName(e.target.value))}
+              placeholder="Enter the name of the chart"
+              className={styles.placeholder}
+            ></input>
+          </label>
+          <label className="block mb-6">
+            <span className="block text-sm font-medium text-slate-700">
+              Goal
+            </span>
+            <textarea
+              id="goal"
+              name="goal"
+              value={chart.goal}
+              onChange={(e) => dispatch(updateChartGoal(e.target.value))}
+              placeholder="Enter your goal"
+              className={styles.placeholder}
+            ></textarea>
+          </label>
 
-        <div className=" mb-6">
-          <span className="block text-sm font-medium text-slate-700">
-            Steps
-          </span>
-          <div className="ml-2">
-            {chart.steps.map((s, index) => (
-              <div key={index} className="flex space-x-2 items-center mt-2">
+          <div className=" mb-6">
+            <span className="block text-sm font-medium text-slate-700">
+              Steps
+            </span>
+            <div className="ml-2">
+              {chart.steps.map((s, index) => (
+                <div key={index} className="flex space-x-2 items-center mt-2">
+                  <FaChevronRight className="text-slate-600" />
+                  <div className="border border-slate-300 rounded-md text-sm px-3 py-2 w-48">
+                    <DayPickerInput
+                      value={s.date}
+                      onDayChange={(day) => setNewStepDate(day)}
+                      formatDate={formatDate}
+                      format={'dd/MM/yyyy'}
+                      parseDate={parseDate}
+                      keepFocus={false}
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    id={`step_${index}`}
+                    name={`step_${index}`}
+                    value={s.text}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      dispatch(
+                        updateStepText({ index, newText: e.target.value })
+                      );
+                    }}
+                    className={styles.placeholder + ' mt-0'}
+                  />
+                  <button
+                    id="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(removeStepToChart({ index }));
+                    }}
+                    className="flex items-center justify-center bg-slate-500 shadow-xl hover:bg-red-500 text-white space-x-2 tracking-wider rounded-full p-2"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              ))}
+              <div className="flex space-x-2 items-center mt-2">
                 <FaChevronRight className="text-slate-600" />
                 <div className="border border-slate-300 rounded-md text-sm px-3 py-2 w-48">
                   <DayPickerInput
-                    value={s.date}
+                    value={newStepDate}
                     onDayChange={(day) => setNewStepDate(day)}
                     formatDate={formatDate}
                     format={'dd/MM/yyyy'}
                     parseDate={parseDate}
-                    keepFocus={false}
                   />
                 </div>
                 <input
                   type="text"
-                  id={`step_${index}`}
-                  name={`step_${index}`}
-                  value={s.text}
-                  onChange={(e) => {
-                    e.preventDefault();
-                    dispatch(
-                      updateStepText({ index, newText: e.target.value })
-                    );
-                  }}
+                  id="step"
+                  name="step"
+                  value={newStepText}
+                  onChange={(e) => setNewStepText(e.target.value)}
+                  placeholder="Enter the step text"
                   className={styles.placeholder + ' mt-0'}
-                />
+                ></input>
                 <button
                   id="button"
                   onClick={(e) => {
                     e.preventDefault();
-                    dispatch(removeStepToChart({ index }));
+                    dispatch(
+                      addStepToChart({ date: newStepDate, text: newStepText })
+                    );
+                    setNewStepDate(new Date());
+                    setNewStepText('');
                   }}
-                  className="flex items-center justify-center bg-slate-500 shadow-xl hover:bg-red-500 text-white space-x-2 tracking-wider rounded-full p-2"
+                  className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white space-x-2 tracking-wider rounded-full p-2"
                 >
-                  <FaTrash />
+                  <FaPlus />
                 </button>
               </div>
-            ))}
-            <div className="flex space-x-2 items-center mt-2">
-              <FaChevronRight className="text-slate-600" />
-              <div className="border border-slate-300 rounded-md text-sm px-3 py-2 w-48">
-                <DayPickerInput
-                  value={newStepDate}
-                  onDayChange={(day) => setNewStepDate(day)}
-                  formatDate={formatDate}
-                  format={'dd/MM/yyyy'}
-                  parseDate={parseDate}
-                />
-              </div>
-              <input
-                type="text"
-                id="step"
-                name="step"
-                value={newStepText}
-                onChange={(e) => setNewStepText(e.target.value)}
-                placeholder="Enter the step text"
-                className={styles.placeholder + ' mt-0'}
-              ></input>
-              <button
-                id="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  dispatch(
-                    addStepToChart({ date: newStepDate, text: newStepText })
-                  );
-                  setNewStepDate(new Date());
-                  setNewStepText('');
-                }}
-                className="flex items-center justify-center bg-indigo-600 shadow-xl hover:bg-indigo-500 text-white space-x-2 tracking-wider rounded-full p-2"
-              >
-                <FaPlus />
-              </button>
             </div>
           </div>
-        </div>
 
-        <label className="block mb-6">
-          <span className="block text-sm font-medium text-slate-700">
-            Current
-          </span>
-          <textarea
-            id="current"
-            name="current"
-            value={chart.current}
-            onChange={(e) => dispatch(updateChartCurrent(e.target.value))}
-            placeholder="Enter your current reality"
-            className={styles.placeholder}
-          ></textarea>
-        </label>
-      </form>
-    </div>
-  );
+          <label className="block mb-6">
+            <span className="block text-sm font-medium text-slate-700">
+              Current
+            </span>
+            <textarea
+              id="current"
+              name="current"
+              value={chart.current}
+              onChange={(e) => dispatch(updateChartCurrent(e.target.value))}
+              placeholder="Enter your current reality"
+              className={styles.placeholder}
+            ></textarea>
+          </label>
+        </form>
+      </div>
+    );
 };
 
 export default EditChart;
