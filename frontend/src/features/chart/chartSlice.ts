@@ -155,7 +155,7 @@ export const chartSlice = createSlice({
       })
       .addCase(deleteChart.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        //state.isSuccess = true;
         state.charts = action.payload;
       })
       .addCase(deleteChart.rejected, (state, action) => {
